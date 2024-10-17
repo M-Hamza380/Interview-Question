@@ -11,15 +11,6 @@ from langchain.chains.summarize import load_summarize_chain
 from src.prompt import *
 
 def file_processing(file_path: str) -> tuple[list[Document], List[Document]]:
-    """_summary_
-
-    Args:
-        file_path (str): give the pdf directory path
-
-    Returns:
-        tuple[list[Document], List[Document]]: this function will return the list of documents
-    """
-
     # Load PDF Directory
     loader = PyPDFDirectoryLoader(file_path)
     data = loader.load()
@@ -53,15 +44,6 @@ def file_processing(file_path: str) -> tuple[list[Document], List[Document]]:
 
 
 def llm_pipeline(file_path: str):
-    """_summary_
-
-    Args:
-        file_path (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
-
     doc_questions, doc_answers = file_processing(file_path)
 
     # Define llm model
