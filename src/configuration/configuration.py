@@ -23,9 +23,7 @@ class ConfigurationManager:
 
         data_ingestion_config = DataIngestionConfig(
             root_dir=config.root_dir,
-            copy_data_dir=config.copy_data_dir,
-            sdg_data=config.sdg_data,
-            stats_data=config.stats_data
+            copy_data_dir=config.copy_data_dir
         )
         return data_ingestion_config
     
@@ -42,8 +40,7 @@ class ConfigurationManager:
 
         data_validation_config = DataValidationConfig(
             root_dir=config.root_dir,
-            sdg_data=config.sdg_data,
-            stats_data=config.stats_data
+            status_file=config.status_file
         )
         return data_validation_config
 
@@ -60,6 +57,6 @@ class ConfigurationManager:
 
         vector_embeddings_config = VectorEmbeddingsConfig(
             root_dir=config.root_dir,
-            folder_path=config.folder_path
+            copy_embeds_dir=config.copy_embeds_dir
         )
         return vector_embeddings_config        
