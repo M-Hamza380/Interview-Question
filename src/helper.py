@@ -8,40 +8,6 @@ from langchain_core.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.chains.summarize import load_summarize_chain
 
-from src.prompt import *
-
-def file_processing(file_path: str) -> tuple[list[Document], List[Document]]:
-    # Load PDF Directory
-    loader = PyPDFDirectoryLoader(file_path)
-    data = loader.load()
-
-    # Extract the text from the PDF
-    questions = ""
-
-    for page in data:
-        questions += page.page_content
-    
-    model_name = "gpt-3.5-turbo"
-    split_questions = TokenTextSplitter(
-        model_name = model_name,
-        chunk_size = 10000,
-        chunk_overlap = 200
-    )
-
-    chunk_questions = split_questions.split_text(questions)
-
-    doc_questions = [Document(t) for t in chunk_questions]
-
-    split_ans = TokenTextSplitter(
-        model_name = model_name,
-        chunk_size = 1000,
-        chunk_overlap = 100
-    )
-
-    doc_answers = split_ans.split_documents(doc_questions)
-
-    return doc_questions, doc_answers
-
 
 def llm_pipeline(file_path: str):
     doc_questions, doc_answers = file_processing(file_path)

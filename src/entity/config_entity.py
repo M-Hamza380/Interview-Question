@@ -6,7 +6,7 @@ from src.contants import *
 @dataclass(frozen=True)
 class DataIngestionConfig:
     root_dir: Path
-    stats_data: Path
+    copy_data_dir: Path
 
 @dataclass(frozen=True)
 class DataValidationConfig:

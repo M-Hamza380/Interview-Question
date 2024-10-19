@@ -8,6 +8,18 @@ class DataValidation:
         self.data_validation_config = data_validation_config
     
     def validation_pdf_files(self):
+        """
+            Validates the data ingestion directory by checking if there are any PDF files or other files present.
+
+            If there are PDF files, it lists them in the report. If there are other files, it lists them in the report too.
+
+            The report is written to the status_file path in the data_validation_config.
+
+            If there is an exception, it is raised.
+
+            Returns:
+                None
+        """
         try:
             ingestion_files = list(self.ingestion_config.root_dir.glob("*.pdf"))
             report_lines = []
