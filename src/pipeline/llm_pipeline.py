@@ -1,18 +1,19 @@
+from src.configuration.configuration import ConfigurationManager
 from src.components.data_ingestion import DataIngestion
 from src.components.data_validation import DataValidation
 from src.components.vector_embeddings import VectorEmbeddings
-from src.components.llm_model import LLMModel
 from src.components.file_process import FileProcessing
-
-from src.entity.config_entity import (DataIngestionConfig, DataValidationConfig, 
-                                       VectorEmbeddingsConfig, ModelConfig)
+from src.components.llm_model import LLMModel
+from src.entity.config_entity import ModelConfig
+from src.constants import TOKEN_MODEL, LLM_MODEL_NAME
 
 class LLMPipeline:
     def __init__(self) -> None:
-        self.data_ingestion_config = DataIngestionConfig()
-        self.data_validation_config = DataValidationConfig()
-        self.vector_embeddings_config = VectorEmbeddingsConfig()
-        self.model_config = ModelConfig()
+        config_manager = ConfigurationManager()
+        self.data_ingestion_config = config_manager.get_data_ingestion_config()
+        self.data_validation_config = config_manager.get_data_validation_config()
+        self.vector_embeddings_config = config_manager.get_vector_embeddings_config()
+        self.model_config = ModelConfig(TOKEN_MODEL, LLM_MODEL_NAME)
 
     def run_llm_pipeline(self):
         try:
@@ -21,7 +22,7 @@ class LLMPipeline:
             data_ingestion.copy_pdf_files()
 
             # Data Validation
-            data_validation = DataValidation(self.data_validation_config)
+            data_validation = DataValidation(ingestion_config=self.data_ingestion_config, data_validation_config=self.data_validation_config)
             data_validation.validation_pdf_files()
 
             # Vector Embeddings

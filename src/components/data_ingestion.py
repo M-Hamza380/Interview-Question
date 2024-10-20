@@ -1,4 +1,5 @@
 import shutil
+from pathlib import Path
 
 from src.entity.config_entity import DataIngestionConfig
 
@@ -12,8 +13,8 @@ class DataIngestion:
         """
         
         try:
-            from_dir = self.data_ingestion_config.copy_data_dir
-            to_dir = self.data_ingestion_config.root_dir
+            from_dir = Path(self.data_ingestion_config.copy_data_dir)
+            to_dir = Path(self.data_ingestion_config.root_dir)
 
             to_dir.mkdir(parents=True, exist_ok=True)
 

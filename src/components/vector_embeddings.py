@@ -1,4 +1,5 @@
 import shutil
+from pathlib import Path
 
 from src.entity.config_entity import VectorEmbeddingsConfig
 
@@ -19,13 +20,14 @@ class VectorEmbeddings:
                 Exception: Propagates any exception encountered during the copy operation.
         """
         try:
-            from_dir = self.vector_embeddings_config.copy_embeds_dir
-            to_dir = self.vector_embeddings_config.root_dir
-
+            from_dir = Path(self.vector_embeddings_config.copy_embeds_dir)
+            to_dir = Path(self.vector_embeddings_config.root_dir)
             to_dir.mkdir(parents=True, exist_ok=True)
 
             for item in from_dir.iterdir():
-                if item.is_file() or item.is_dir():
-                    shutil.copy(from_dir, to_dir / item.name)
+                if item.is_file():
+                    shutil.copy(item, to_dir / item.name)
+                elif item.is_dir():
+                    shutil.copytree(item, to_dir / item.name, dirs_exist_ok=True)
         except Exception as e:
             raise e

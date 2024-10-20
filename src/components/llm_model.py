@@ -1,5 +1,5 @@
 from langchain_community.vectorstores import FAISS
-from langchain_community.chat_models import ChatOllama
+from langchain_ollama import ChatOllama
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_core.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
@@ -60,6 +60,13 @@ class LLMModel:
                 question_prompt=prompt_questions,
                 refine_prompt=refine_prompt_questions
             )
+
+            print(f"Question Generation Chain: {ques_chain}")
+            print(f"Doc Questions: {doc_questions}")
+            print(f"Type: {type(ques_chain)}")
+            
+            if not doc_questions:
+                raise ValueError("doc_questions is empty. Please provide valid input.")
 
             ques = ques_chain.run(doc_questions)
 

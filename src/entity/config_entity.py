@@ -1,7 +1,7 @@
 from pathlib import Path
 from dataclasses import dataclass
 
-from src.contants import *
+from src.constants import *
 
 @dataclass(frozen=True)
 class DataIngestionConfig:
@@ -20,6 +20,5 @@ class VectorEmbeddingsConfig:
 
 @dataclass(frozen=True)
 class ModelConfig:
-    def __init__(self):
-        self.TOKEN_MODEL = TOKEN_MODEL
-        self.LLM_MODEL_NAME = LLM_MODEL_NAME
+    TOKEN_MODEL: str
+    LLM_MODEL_NAME: str

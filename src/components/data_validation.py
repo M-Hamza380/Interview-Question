@@ -21,17 +21,17 @@ class DataValidation:
                 None
         """
         try:
-            ingestion_files = list(self.ingestion_config.root_dir.glob("*.pdf"))
+            ingestion_files = list(Path(self.ingestion_config.root_dir).glob("*.pdf"))
             report_lines = []
 
             if ingestion_files:
-                report_lines.append("PDF files in data ingestion directory.")
+                report_lines.append("PDF files in data ingestion directory.\n")
                 for pdf in ingestion_files:
-                    report_lines.append(f"- {pdf.name}")
+                    report_lines.append(f"- {pdf.name}\n")
             else:
                 report_lines.append("No PDF files in data ingestion directory.")
             
-            all_files = list(self.ingestion_config.root_dir.glob("*"))
+            all_files = list(Path(self.ingestion_config.root_dir).glob("*"))
             other_files = [f for f in all_files if f.suffix != ".pdf"]
 
             if other_files:
@@ -40,8 +40,7 @@ class DataValidation:
                     report_lines.append(f"- {file.name}")
             
             with open(self.data_validation_config.status_file, "w") as report_file:
-                for line in report_lines:
-                    report_file.write(line + "\n".join(report_lines))
+                report_file.write("".join(report_lines))
         except Exception as e:
             raise e
 
