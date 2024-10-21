@@ -23,28 +23,19 @@ class FileProcessing:
 
             if not pdf_files:
                 raise FileNotFoundError("No PDF files found in the data ingestion directory.")
+            
+            # Load PDF Directory
+            loader = PyPDFDirectoryLoader(str(pdf_dir))
+            data = loader.load()
 
             # Extract the text from the PDF
             questions = ""
 
-            for pdf_file in pdf_files:
-                # Load PDF Directory
-                loader = PyPDFDirectoryLoader(pdf_file)
-                data = loader.load()
-
-                # Check what has been loaded
-                print(f"Data loaded from {pdf_file}: {data[:5]}")  # Print data structure
-
-                if not data:
-                    print(f"No content found in {pdf_file}")
-                    continue  # Skip to the next file
-
-                for page in data:
-                    if page.page_content:  # Check if page_content is not None or empty
-                        questions += page.page_content
-                        print(f"Extracted content: {page.page_content[:200]}")  # Print the first 200 characters
-                    else:
-                        print("No content in this page.")
+            for page in data:
+                if page.page_content:
+                    questions += page.page_content
+                else:
+                    print("No content in this page, file_process method.")
             
             model_name = self.model_config.TOKEN_MODEL
             split_questions = TokenTextSplitter(
@@ -64,8 +55,6 @@ class FileProcessing:
             )
 
             doc_answers = split_ans.split_documents(doc_questions)
-            print(f"Document Questions: {doc_questions}, Document Answers: {doc_answers}")
             return doc_questions, doc_answers
-
         except Exception as e:
             raise RuntimeError(f"Error during file processing: {e}")

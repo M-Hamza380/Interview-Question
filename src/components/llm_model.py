@@ -1,6 +1,6 @@
 from langchain_community.vectorstores import FAISS
 from langchain_ollama import ChatOllama
-from langchain_community.embeddings import OllamaEmbeddings
+from langchain_ollama.embeddings import OllamaEmbeddings
 from langchain_core.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.chains.summarize import load_summarize_chain
@@ -36,6 +36,9 @@ class LLMModel:
         try:
             doc_questions, doc_answers = self.file_processing.file_processing()
 
+            if not doc_questions:
+                raise ValueError("doc_questions is empty. Please provide valid input.")
+
             # Define the LLM model
             model_name = self.model_config.LLM_MODEL_NAME
             llm_question_gen_pipeline = ChatOllama(
@@ -61,19 +64,12 @@ class LLMModel:
                 refine_prompt=refine_prompt_questions
             )
 
-            print(f"Question Generation Chain: {ques_chain}")
-            print(f"Doc Questions: {doc_questions}")
-            print(f"Type: {type(ques_chain)}")
-            
-            if not doc_questions:
-                raise ValueError("doc_questions is empty. Please provide valid input.")
-
-            ques = ques_chain.run(doc_questions)
+            ques = ques_chain.invoke(doc_questions)
 
             folder_path = self.vector_embeddings_config.root_dir
             embeds = OllamaEmbeddings(model=model_name)
 
-            db = FAISS.load_local(file_path=folder_path, embeddings=embeds, allow_dangerous_deserialization=True)
+            db = FAISS.load_local(folder_path=folder_path, embeddings=embeds, allow_dangerous_deserialization=True)
 
             llm_ans = ChatOllama(
                 model=model_name,
@@ -90,8 +86,6 @@ class LLMModel:
             )
 
             ans = answer_generation_chain.run(ques)
-
             return answer_generation_chain, filtered_ques_list
-
         except Exception as e:
             raise RuntimeError(f"Error in LLMModel: {e}")
