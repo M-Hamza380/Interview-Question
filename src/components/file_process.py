@@ -10,7 +10,7 @@ class FileProcessing:
         self.model_config = model_config
         self.data_ingestion_config = data_ingestion_config
 
-    def file_processing(self):
+    def run_file_processing(self):
         """
             Processes the PDF files in the data ingestion directory.
 

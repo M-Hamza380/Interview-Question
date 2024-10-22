@@ -34,7 +34,7 @@ class LLMModel:
                 RuntimeError: If any error occurs during the execution of the LLM model pipeline.
         """
         try:
-            doc_questions, doc_answers = self.file_processing.file_processing()
+            doc_questions, doc_answers = self.file_processing.run_file_processing()
 
             if not doc_questions:
                 raise ValueError("doc_questions is empty. Please provide valid input.")
@@ -64,7 +64,7 @@ class LLMModel:
                 refine_prompt=refine_prompt_questions
             )
 
-            ques = ques_chain.invoke(doc_questions)
+            ques = ques_chain.run(doc_questions)
 
             folder_path = self.vector_embeddings_config.root_dir
             embeds = OllamaEmbeddings(model=model_name)
@@ -78,6 +78,7 @@ class LLMModel:
 
             ques_list = ques.split("\n")
             filtered_ques_list = [element for element in ques_list if element.endswith('?') or element.endswith('.')]
+            print(f"Question count: {len(filtered_ques_list)}")
 
             answer_generation_chain = RetrievalQA.from_chain_type(
                 llm=llm_ans,

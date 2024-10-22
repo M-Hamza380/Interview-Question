@@ -22,7 +22,6 @@ class VectorEmbeddings:
         try:
             from_dir = Path(self.vector_embeddings_config.copy_embeds_dir)
             to_dir = Path(self.vector_embeddings_config.root_dir)
-            to_dir.mkdir(parents=True, exist_ok=True)
 
             for item in from_dir.iterdir():
                 if item.is_file():

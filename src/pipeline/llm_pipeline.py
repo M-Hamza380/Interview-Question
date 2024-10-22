@@ -31,12 +31,12 @@ class LLMPipeline:
 
             # File Processing
             file_processing = FileProcessing(self.model_config, self.data_ingestion_config)
+            file_processing.run_file_processing()
 
             # LLM Model
             model = LLMModel(self.model_config, self.vector_embeddings_config, file_processing)
             answer_chain, questions_list = model.llm_model()
 
             return answer_chain, questions_list
-
         except Exception as e:
             raise RuntimeError(f"Error in LLMPipeline: {e}")
