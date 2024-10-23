@@ -19,14 +19,21 @@ class FileProcessing:
         """
         try:
             pdf_dir = Path(self.data_ingestion_config.root_dir)
+            print(f"Looking for PDF files in: {pdf_dir}")
             pdf_files = list(pdf_dir.glob("*.pdf"))
+            print(f"PDF files found: {pdf_files}")
 
             if not pdf_files:
                 raise FileNotFoundError("No PDF files found in the data ingestion directory.")
             
+            for pdf_file in pdf_files:
+                if pdf_file.stat().st_size == 0:
+                    raise ValueError(f"Uploaded PDF file '{pdf_file.name}' is empty.")
+            
             # Load PDF Directory
             loader = PyPDFDirectoryLoader(str(pdf_dir))
             data = loader.load()
+            print(f"Daty Loaded {len(data)} pages from PDF.")
 
             # Extract the text from the PDF
             questions = ""

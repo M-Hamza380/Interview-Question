@@ -9,11 +9,14 @@ from src.constants import TOKEN_MODEL, LLM_MODEL_NAME
 
 class LLMPipeline:
     def __init__(self) -> None:
-        config_manager = ConfigurationManager()
-        self.data_ingestion_config = config_manager.get_data_ingestion_config()
-        self.data_validation_config = config_manager.get_data_validation_config()
-        self.vector_embeddings_config = config_manager.get_vector_embeddings_config()
+        self.config_manager = ConfigurationManager()
+        self.data_ingestion_config = self.config_manager.get_data_ingestion_config()
+        self.data_validation_config = self.config_manager.get_data_validation_config()
+        self.vector_embeddings_config = self.config_manager.get_vector_embeddings_config()
         self.model_config = ModelConfig(TOKEN_MODEL, LLM_MODEL_NAME)
+    
+    def set_copy_data_dir(self, copy_data_dir: str):
+        self.config_manager.update_copy_data_dir(copy_data_dir)
 
     def run_llm_pipeline(self):
         try:

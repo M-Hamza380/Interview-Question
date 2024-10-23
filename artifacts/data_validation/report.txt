@@ -1,3 +1,2 @@
 PDF files in data ingestion directory.
 - SDG.pdf
-- stats.pdf

@@ -10,6 +10,9 @@ class ConfigurationManager:
 
         create_directories([self.config['artifacts_root']])
     
+    def update_copy_data_dir(self, new_dir: str) -> None:
+        self.config['data_ingestion']['copy_data_dir'] = new_dir
+    
     def get_data_ingestion_config(self) -> DataIngestionConfig:
         """
         Gets the data ingestion configuration from the config file.
