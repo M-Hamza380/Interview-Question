@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from src.constants import Config_File_Path
 from src.utils.common import read_yaml, create_directories
 from src.entity.config_entity import (DataIngestionConfig, DataValidationConfig,
@@ -5,13 +7,15 @@ from src.entity.config_entity import (DataIngestionConfig, DataValidationConfig,
 
 
 class ConfigurationManager:
-    def __init__(self, config_file_path: str = Config_File_Path) -> None:
-        self.config: dict = read_yaml(config_file_path)
+    def __init__(self, config_file_path: Path = Config_File_Path) -> None:
+        self.config = read_yaml(config_file_path)
 
-        create_directories([self.config['artifacts_root']])
+        if self.config is not None:
+            create_directories([self.config['artifacts_root']])
     
     def update_copy_data_dir(self, new_dir: str) -> None:
-        self.config['data_ingestion']['copy_data_dir'] = new_dir
+        if self.config is not None:
+            self.config['data_ingestion']['copy_data_dir'] = new_dir
     
     def get_data_ingestion_config(self) -> DataIngestionConfig:
         """
@@ -20,6 +24,9 @@ class ConfigurationManager:
         Returns:
             DataIngestionConfig: The data ingestion configuration
         """
+        if self.config is None:
+            raise ValueError("Configuration is not loaded.")
+
         config = self.config['data_ingestion']
 
         create_directories([config['root_dir']])
@@ -37,6 +44,9 @@ class ConfigurationManager:
         Returns:
             DataValidationConfig: The data validation configuration
         """
+        if self.config is None:
+            raise ValueError("Configuration is not loaded.")
+        
         config = self.config['data_validation']
 
         create_directories([config['root_dir']])
@@ -54,6 +64,9 @@ class ConfigurationManager:
         Returns:
             VectorEmbeddingsConfig: The vector embeddings configuration
         """
+        if self.config is None:
+            raise ValueError("Configuration is not loaded.")
+        
         config = self.config['vector_embeddings']
 
         create_directories([config['root_dir']])

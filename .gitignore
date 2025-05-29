@@ -162,5 +162,7 @@ cython_debug/
 #.idea/
 
 .IQC/*
+.iq*
+
 
 notebook exp/*

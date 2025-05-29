@@ -1,9 +1,18 @@
 from pathlib import Path
 
 import yaml, os
+from functools import lru_cache
+
+from src.configuration.config import Settings
 
 
-def read_yaml(path_to_yaml: Path) -> dict:
+@lru_cache
+def get_setting():
+    """Returns the application settings"""
+    return Settings()
+
+
+def read_yaml(path_to_yaml: Path):
     """
     Reads a YAML file and returns its content as a dictionary.
 
@@ -18,7 +27,7 @@ def read_yaml(path_to_yaml: Path) -> dict:
             content = yaml.safe_load(yaml_file)
             return content
     except Exception as e:
-        print(f"Error reading {path_to_yaml}: {e.strerror}")
+        print(f"Error reading {path_to_yaml}: {e}")
 
 def create_directories(path_to_directories: list):
     """
